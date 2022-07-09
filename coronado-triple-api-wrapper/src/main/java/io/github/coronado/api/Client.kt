@@ -12,7 +12,7 @@ import java.time.LocalDateTime
 import java.util.Base64
 
 class Client private constructor(
-    val endpoint: String?,
+    val serviceDomain: String?,
     val clientId: String?,
     val clientSecret: String?,
     val scope: OAuth2Scope?,
@@ -20,14 +20,14 @@ class Client private constructor(
 ) {
     // Validated state in initializer
     init {
-        if (endpoint == null) { throw IllegalArgumentException("endpoint must not be null") }
+        if (serviceDomain == null) { throw IllegalArgumentException("endpoint must not be null") }
         if (clientId == null) { throw IllegalArgumentException("clientId must not be null") }
         if (clientSecret == null) { throw IllegalArgumentException("clientSecret must not be null") }
         if (scope == null) { throw IllegalArgumentException("scope must not be null") }
     }
 
-    val tokenUrl = "https://auth.$endpoint/oauth2/token"
-    val apiUrl = "https://api.$endpoint/"
+    val tokenUrl = "https://auth.$serviceDomain/oauth2/token"
+    val apiUrl = "https://api.$serviceDomain/"
     val httpClient = HttpClient.newBuilder().build()
 
     var jwt = emptyMap<String, String>()
@@ -36,18 +36,18 @@ class Client private constructor(
     private var tokenType = ""
 
     data class Builder(
-        var endpoint: String? = null,
+        var serviceDomain: String? = null,
         var clientId: String? = null,
         var clientSecret: String? = null,
         var scope: OAuth2Scope? = null,
         var ttl: Long? = null
     ) {
-        fun endpoint(endpoint: String) = apply { this.endpoint = endpoint }
+        fun serviceDomain(serviceDomain: String) = apply { this.serviceDomain = serviceDomain }
         fun clientId(clientId: String) = apply { this.clientId = clientId }
         fun clientSecret(clientSecret: String) = apply { this.clientSecret = clientSecret }
         fun scope(scope: OAuth2Scope) = apply { this.scope = scope }
         fun ttl(ttl: Long) = apply { this.ttl = ttl }
-        fun build() = Client(endpoint, clientId, clientSecret, scope, ttl)
+        fun build() = Client(serviceDomain, clientId, clientSecret, scope, ttl)
     }
 
     enum class OAuth2Scope {
