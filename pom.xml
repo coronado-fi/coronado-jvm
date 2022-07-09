@@ -88,6 +88,7 @@
         <versions-maven-plugin.version>2.11.0</versions-maven-plugin.version>
         <!-- dependency versioning -->
         <dependency.checkstyle.version>10.3.1</dependency.checkstyle.version>
+        <dependency.dokka.version>1.7.0</dependency.dokka.version>
         <dependency.gson.version>2.9.0</dependency.gson.version>
         <dependency.junit-jupiter-engine.version>5.8.2</dependency.junit-jupiter-engine.version>
         <dependency.ktlint.version>0.46.1</dependency.ktlint.version>
@@ -281,6 +282,11 @@
                     <version>${directory-maven-plugin.version}</version>
                 </plugin>
                 <plugin>
+                    <groupId>org.jetbrains.dokka</groupId>
+                    <artifactId>dokka-maven-plugin</artifactId>
+                    <version>${dependency.dokka.version}</version>
+                </plugin>
+                <plugin>
                     <groupId>org.jetbrains.kotlin</groupId>
                     <artifactId>kotlin-maven-plugin</artifactId>
                     <version>${kotlin.version}</version>
@@ -295,6 +301,10 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-enforcer-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>io.github.git-commit-id</groupId>
+                <artifactId>git-commit-id-maven-plugin</artifactId>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -384,13 +394,14 @@
                         </executions>
                     </plugin>
                     <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <groupId>org.jetbrains.dokka</groupId>
+                        <artifactId>dokka-maven-plugin</artifactId>
                         <executions>
                             <execution>
-                                <id>attach-javadocs</id>
+                                <id>attach-dokka-javadocs</id>
+                                <phase>package</phase>
                                 <goals>
-                                    <goal>jar</goal>
+                                    <goal>javadocJar</goal>
                                 </goals>
                             </execution>
                         </executions>
